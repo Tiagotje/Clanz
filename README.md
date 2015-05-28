@@ -1,5 +1,7 @@
 # Clanz
 Yolo 4 the win
+## Travis CI
+[![Build Status](https://travis-ci.org/Bastiaantje/Clanz.svg)](https://travis-ci.org/Bastiaantje/Clanz)
 ## License
                                  Apache License
                            Version 2.0, January 2004
