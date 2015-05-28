@@ -1,0 +1,19 @@
+name: Clanz
+main: clanz.Clanz
+description: Clanz is the clan plugin for RealCraft made by Tjagotje
+version: 0.0.1
+author: Tjagotje
+commands:
+   clanz:
+      description: Main command for Clanz plugin
+      usage: 'Type /clanz for help'
+      aliases: [clan, c, cl]
+
+permissions:
+  clanz.*:
+    description: Gives access to all Clanz commands.
+    default: op
+    children:
+      clanz.admin.*: true
+  clanz.admin.*:
+    description: Gives access to all Clanz Admin commands.
