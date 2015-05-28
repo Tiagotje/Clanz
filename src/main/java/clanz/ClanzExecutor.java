@@ -18,25 +18,39 @@ public class ClanzExecutor implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String lbl, String[] a){
 		try{
-		if(!(sender instanceof Player)){}
-		if(a.length == 0){showHelp(sender); return true;}
-		
-		if(a.length == 1){
-			if(a[0].equals("save")){plugin.ClanzFile.save(plugin.ClanzPath);}
-			return true;
-		}
-		if(a.length == 2){
-			if(a[0].equalsIgnoreCase("new")){
+			if(!(sender instanceof Player)){noPlayer(sender); return true;}
+			Player player = (Player) sender;
+			Clan clan = plugin.getPlayerClan(player.getUniqueId());
+			// clanz , clan , cl, c
+			if(a.length == 0){showHelp(sender); return true;}
+			// c help
+			if(a[0].equals("help") && a.length == 1){
+				showHelp(sender); return true;
+			}
+			// c save
+			if(a[0].equals("save") && a.length == 1){
+				plugin.ClanzFile.save(plugin.ClanzPath);
+				sender.sendMessage(ChatColor.GREEN + "Sucessfully saved clanz.yml");
+			}
+			// c new *name*
+			if(a[0].equalsIgnoreCase("new") && a.length == 2){
 				if(!sender.hasPermission("clanz.new")){noPermissions(sender); return true;}
 				if(!(sender instanceof Player)){ noPlayer(sender); return true;}
-				String name = a[1];
-				plugin.ClanzFile.set("clanz."+name, ((Player) sender).getName());
-				sender.sendMessage(ChatColor.GREEN + "Sucessfully created the \"" + name + "\" clan!");
+				plugin.Clans.add( new Clan(plugin, a[1], ((Player)sender).getUniqueId() ));
+				sender.sendMessage(ChatColor.GREEN + "Sucessfully created the " + a[1] + " clan!");
 				return true;
 			}
-		}
+			// c name *new name*
+			if(a[0].equalsIgnoreCase("name") && a.length == 2){
+				if(new ClanPermissions(plugin).CheckAccess(clan, player, 6)){
+					clan.changeName(a[1], sender);
+				}else{noPermissions(sender);}
+			}
+				
+				
 		}catch(Exception e){
-			plugin.getLogger().severe(e.getMessage());
+			plugin.getLogger().severe(e.toString());
+			e.printStackTrace();
 		}
 		
 		return false;
