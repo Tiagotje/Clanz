@@ -1,12 +1,19 @@
 package clanz;
 
 import java.io.File;
+import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import clanz.commands.ClanzCommandEvent;
+import clanz.commands.ClanzCommandListener;
 
 public class Clanz extends JavaPlugin{
 	
@@ -16,7 +23,6 @@ public class Clanz extends JavaPlugin{
 	
 	@Override
 	public void onEnable(){
-		//Temporary
 		ClanzPath  = new File(getDataFolder(), "clanz.yml");
 		if(!ClanzPath.exists()){
 			getDataFolder().mkdirs();
@@ -26,8 +32,22 @@ public class Clanz extends JavaPlugin{
 				getLogger().severe(e.getMessage());
 		}}
 		ClanzFile = YamlConfiguration.loadConfiguration(ClanzPath);
-		Clans.add(new Clan(this, "TEMP", UUID.fromString("c8c62d04-d549-4dda-a33a-d6e2dfa542b9")));
-		getCommand("clanz").setExecutor(new ClanzExecutor(this));
+		//Tempoary test clan
+		Clans.add(new Clan(this, "TEST", UUID.fromString("c8c62d04-d549-4dda-a33a-d6e2dfa542b9"), UUID.fromString("c8c62d04-d549-4dda-a33a-d6e2dfa542b9") ));
+		
+		getCommand("clanz").setExecutor(new CommandExecutor(){
+			public boolean onCommand(CommandSender arg0, Command arg1, String arg2, String[] arg3) {
+				if(arg1.getName().equalsIgnoreCase("clanz")){
+					getServer().getPluginManager().callEvent(new ClanzCommandEvent(arg0, arg3));
+				}return true; } } );
+		
+		
+		getServer().getPluginManager().registerEvents(new ClanzCommandListener(this), this);
+		
+		AbstractSet<String> ClanSet = (AbstractSet<String>) ClanzFile.getKeys(false);
+		for(String s: ClanSet){
+			Clans.add(new Clan(this, ClanzFile.getConfigurationSection(s), s));
+		}
 	}
 	
 	@Override
@@ -37,10 +57,12 @@ public class Clanz extends JavaPlugin{
 		} catch (Exception e) {
 			getLogger().severe("FATAL ERROR, COULD NOT SAVE clanz.yml ! \n " + e.getMessage());
 		}
+		Clans.clear();
+		ClanzFile = new YamlConfiguration();
 	}
 	
 	
-	Clan getClanName(String name){
+	Clan getClanByName(String name){
 		for(Clan c: Clans){
 			if(c.name.equalsIgnoreCase(name)) return c;
 		}
