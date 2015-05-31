@@ -1,4 +1,4 @@
-package clanz;
+package clanz.protection;
 
 import java.util.ArrayList;
 import java.util.List;

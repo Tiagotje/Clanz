@@ -11,31 +11,33 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import clanz.protection.Region;
+
 
 public class Clan {
 	
 	Clanz clanz;
-	UUID uuid;
-	String name;
-	String description;
-	String motd;
-	String tag;
+	public UUID uuid;
+	public String name;
+	public String description;
+	public String motd;
+	public String tag;
 	boolean requireInvite = false;
 	//Players
-	List<String> members = new ArrayList<>();
-	List<String> assistants = new ArrayList<>();
-	List<String> leaders = new ArrayList<>();
-	List<Region> claimed = new ArrayList<>();
+	public List<UUID> members = new ArrayList<>();
+	public List<UUID> assistants = new ArrayList<>();
+	public List<UUID> leaders = new ArrayList<>();
+	public List<Region> claimed = new ArrayList<>();
 	//Political relations
-	List<String> Enemies = new ArrayList<>();
-	List<String> Allies = new ArrayList<>();
+	public List<String> Enemies = new ArrayList<>();
+	public List<String> Allies = new ArrayList<>();
 	
 
 	public Clan(Clanz pl, String name, UUID leader, UUID id){
 		this.uuid = id;
 		this.name = name;
 		this.clanz = pl;
-		leaders.add(leader.toString());
+		leaders.add(leader);
 		pl.ClanzFile.set(uuid.toString() + ".name", name);
 		pl.ClanzFile.set(uuid.toString() + ".leaders" , leaders);
 	}
@@ -49,17 +51,25 @@ public class Clan {
 		name = s.getString("name");
 		clanz = plugin;
 		description = 	s.contains("desc") ? s.getString("desc") : "";
-		leaders 	=	s.getStringList("leaders");
-		assistants 	= 	s.contains("assistants") ? s.getStringList("assistants") : new ArrayList<>();
-		members 	= 	s.contains("members") ? s.getStringList("members") : new ArrayList<>();
+		leaders 	=	toUUIDList(s.getStringList("leaders"));
+		assistants 	= 	s.contains("assistants") ? toUUIDList(s.getStringList("assistants")) : new ArrayList<>();
+		members 	= 	s.contains("members") ? toUUIDList(s.getStringList("members")) : new ArrayList<>();
 		motd 		= 	s.contains("motd") ? s.getString("motd") : description;
-		tag 		=	s.contains("tag") ? s.getString("tag") : name.substring(0, 4);
 		
 		
 	}
 	
+	//converts String list into UUID list
+	List<UUID> toUUIDList(List<String> l){
+		List<UUID> result = new ArrayList<>();
+		for(String s: l){
+			result.add(UUID.fromString(s));
+		}
+		return result;
+	}
+	
 	//Checks if a player is in this clan
-	boolean containsPlayer(UUID uuid){
+	public boolean containsPlayer(UUID uuid){
 		String ID = uuid.toString();
 		if(members.contains(ID)) return true;
 		if(assistants.contains(ID)) return true;
@@ -77,11 +87,37 @@ public class Clan {
 		clanz.ClanzFile.set(uuid.toString() + ".name", name);
 	} 
 	
+	//Gets the total number of players in this clan
+	public int getPlayerCount(){
+		return leaders.size() + assistants.size() + members.size();
+	}
+	
+	
+	//Get amount of players online players
+	public int getOnlinePlayerCount(){
+		int tot = 0;
+		for(UUID s: getPlayerList()){
+			if(clanz.getServer().getPlayer(s) != null){
+				tot++;
+			}
+		}
+		return tot;
+	}
+	
+	//get a list of all players in this clan
+	public List<UUID> getPlayerList(){
+		ArrayList<UUID> res = new ArrayList<>();
+		res.addAll(members);
+		res.addAll(assistants);
+		res.addAll(leaders);
+		return res;
+	}
+	
 	@Override
 	public boolean equals(Object other){
 		if(!(other instanceof Clan)) return false;
 		Clan c = (Clan) other;
-		if(c.uuid == uuid && c.name == name){
+		if(c.uuid == uuid){
 			return true;
 		}
 		return false;

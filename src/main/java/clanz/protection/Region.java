@@ -1,6 +1,8 @@
-package clanz;
+package clanz.protection;
 
 import java.util.List;
+
+import clanz.Clan;
 
 public class Region {
 	
