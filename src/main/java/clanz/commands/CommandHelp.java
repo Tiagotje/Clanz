@@ -3,6 +3,7 @@ package clanz.commands;
 import org.bukkit.entity.Player;
 
 import clanz.Clanz;
+import clanz.entity.ClanPlayer;
 
 public class CommandHelp extends ClanzCommand{
 	
@@ -77,7 +78,7 @@ public class CommandHelp extends ClanzCommand{
     };
 	
 
-	public CommandHelp(Player p, String[] args, Clanz clanz){
+	public CommandHelp(ClanPlayer p, String[] args, Clanz clanz){
 		super(p, args, clanz);
 		Message("§bGo to *SITE* for help on the Clanz plugin");
 		

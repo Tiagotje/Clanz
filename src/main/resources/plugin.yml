@@ -6,7 +6,7 @@ author: Tjagotje
 commands:
    clanz:
       description: Main command for Clanz plugin
-      usage: 'Type /clanz for help'
+      usage: Error. Type /clanz for help
       aliases: [clan, c, cl]
 
 permissions:

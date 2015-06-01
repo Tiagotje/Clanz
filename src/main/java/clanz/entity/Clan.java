@@ -1,4 +1,4 @@
-package clanz;
+package clanz.entity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import clanz.Clanz;
 import clanz.protection.Region;
 
 
@@ -18,15 +19,15 @@ public class Clan {
 	
 	Clanz clanz;
 	public UUID uuid;
-	public String name;
-	public String description;
-	public String motd;
-	public String tag;
+	public String name = "";
+	public String description = "";
+	public String motd = "";
+	public String tag = "";
 	boolean requireInvite = false;
 	//Players
-	public List<UUID> members = new ArrayList<>();
-	public List<UUID> assistants = new ArrayList<>();
-	public List<UUID> leaders = new ArrayList<>();
+	public List<ClanPlayer> members = new ArrayList<>();
+	public List<ClanPlayer> assistants = new ArrayList<>();
+	public List<ClanPlayer> leaders = new ArrayList<>();
 	public List<Region> claimed = new ArrayList<>();
 	//Political relations
 	public List<String> Enemies = new ArrayList<>();
@@ -37,9 +38,9 @@ public class Clan {
 		this.uuid = id;
 		this.name = name;
 		this.clanz = pl;
-		leaders.add(leader);
+		leaders.add(clanz.getClanPlayer(leader));
 		pl.ClanzFile.set(uuid.toString() + ".name", name);
-		pl.ClanzFile.set(uuid.toString() + ".leaders" , leaders);
+		pl.ClanzFile.set(uuid.toString() + ".leaders" , toStringList(leaders));
 	}
 	
 	public Clan(Clanz plugin, String name, UUID leader){
@@ -49,21 +50,31 @@ public class Clan {
 	public Clan(Clanz plugin, ConfigurationSection s, String id){
 		uuid = UUID.fromString(id);
 		name = s.getString("name");
+		if(name == null){clanz.getLogger().severe("ERROR NULL");}
 		clanz = plugin;
 		description = 	s.contains("desc") ? s.getString("desc") : "";
-		leaders 	=	toUUIDList(s.getStringList("leaders"));
-		assistants 	= 	s.contains("assistants") ? toUUIDList(s.getStringList("assistants")) : new ArrayList<>();
-		members 	= 	s.contains("members") ? toUUIDList(s.getStringList("members")) : new ArrayList<>();
+		leaders 	=	toClanPlayerList(s.getStringList("leaders"));
+		assistants 	= 	s.contains("assistants") ? toClanPlayerList(s.getStringList("assistants")) : new ArrayList<>();
+		members 	= 	s.contains("members") ? toClanPlayerList(s.getStringList("members")) : new ArrayList<>();
 		motd 		= 	s.contains("motd") ? s.getString("motd") : description;
 		
 		
 	}
 	
-	//converts String list into UUID list
-	List<UUID> toUUIDList(List<String> l){
-		List<UUID> result = new ArrayList<>();
+	//converts ClanPlayer list into String list
+	List<String> toStringList(List<ClanPlayer> l){
+		List<String> result = new ArrayList<>();
+		for(ClanPlayer c: l){
+			result.add(c.p.getUniqueId().toString());
+		}
+		return result;
+	}
+	
+	//converts String list into ClanPlayer list
+	List<ClanPlayer> toClanPlayerList(List<String> l){
+		List<ClanPlayer> result = new ArrayList<>();
 		for(String s: l){
-			result.add(UUID.fromString(s));
+			result.add(clanz.getClanPlayer(UUID.fromString(s)));
 		}
 		return result;
 	}
@@ -96,8 +107,8 @@ public class Clan {
 	//Get amount of players online players
 	public int getOnlinePlayerCount(){
 		int tot = 0;
-		for(UUID s: getPlayerList()){
-			if(clanz.getServer().getPlayer(s) != null){
+		for(ClanPlayer s: getPlayerList()){
+			if(s.p.isOnline()){
 				tot++;
 			}
 		}
@@ -105,8 +116,8 @@ public class Clan {
 	}
 	
 	//get a list of all players in this clan
-	public List<UUID> getPlayerList(){
-		ArrayList<UUID> res = new ArrayList<>();
+	public List<ClanPlayer> getPlayerList(){
+		ArrayList<ClanPlayer> res = new ArrayList<>();
 		res.addAll(members);
 		res.addAll(assistants);
 		res.addAll(leaders);

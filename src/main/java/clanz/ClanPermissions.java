@@ -2,6 +2,9 @@ package clanz;
 
 import org.bukkit.entity.Player;
 
+import clanz.entity.Clan;
+import clanz.entity.ClanPlayer;
+
 public class ClanPermissions {
 
 	Clanz clanz;
@@ -12,19 +15,18 @@ public class ClanPermissions {
 	
 
 	//Calculates the relation between a player and a clan
-	ClanRelation getRelation(Clan cl, Player p){
-		String uuid = p.getUniqueId().toString();
-		if(cl.leaders.contains(uuid)) return ClanRelation.Leader;
-		if(cl.assistants.contains(uuid)) return ClanRelation.Assistant;
-		if(cl.members.contains(uuid)) return ClanRelation.Member;
+	ClanRelation getRelation(Clan cl, ClanPlayer p){
+		if(cl.leaders.contains(p)) return ClanRelation.Leader;
+		if(cl.assistants.contains(p)) return ClanRelation.Assistant;
+		if(cl.members.contains(p)) return ClanRelation.Member;
 		if(!cl.Allies.isEmpty()){
 			for(String c: cl.Allies){
-				if(clanz.getClanByName(c) != null && c.equals(clanz.getPlayerClan(p.getUniqueId())));
+				if(clanz.getClanByName(c) != null && c.equals(p.clan));
 					return ClanRelation.Ally;
 				}
 		}if(!cl.Enemies.isEmpty()){
 			for(String c: cl.Enemies){
-				if(clanz.getClanByName(c) != null && c.equals(clanz.getPlayerClan(p.getUniqueId())));
+				if(clanz.getClanByName(c) != null && c.equals(p.clan));
 					return ClanRelation.Enemy;
 				}
 		}return ClanRelation.Stranger;
@@ -33,7 +35,7 @@ public class ClanPermissions {
 	
 	
 	//Checks if a player has the required clan permission
-	boolean CheckAccess(Clan cl, Player p, int l){
+	boolean CheckAccess(Clan cl, ClanPlayer p, int l){
 		ClanRelation r = getRelation(cl,p);
 		if(r.i >= l) return true;
 		return false;

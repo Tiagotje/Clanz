@@ -3,15 +3,17 @@ package clanz.commands;
 import org.bukkit.entity.Player;
 
 import clanz.*;
+import clanz.entity.Clan;
+import clanz.entity.ClanPlayer;
 
 public class CommandNew extends ClanzCommand{
 
-	public CommandNew(Player p, String[] args, Clanz clanz) {
+	public CommandNew(ClanPlayer p, String[] args, Clanz clanz) {
 		super(p, args, clanz);
 		if(args.length == 1){  NotEnoughArguments("/c new <name>"); return;}
 		if(args.length > 2){ TooManyArguments("/c new <name>"); return; }
 		if(args.length == 2){
-			if(clanz.getPlayerClan(p.getUniqueId()) != null){
+			if(p.clan != null){
 				Error("You must first leave your current clan to make an other");
 				return;
 			}
@@ -23,7 +25,7 @@ public class CommandNew extends ClanzCommand{
 			}
 			if(args[1].length() < 4){ Error("Name too short!"); return;}
 			if(args[1].length() > 10){ Error("Name too long!"); return;}
-			clanz.Clans.add(new Clan(clanz, args[1], p.getUniqueId()));
+			clanz.Clans.add(new Clan(clanz, args[1], p.p.getUniqueId()));
 			Result("Successfully created the " + args[1] + " clan!");
 			Result("See *SITE* for further instructions!");
 				

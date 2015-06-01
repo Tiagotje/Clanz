@@ -6,12 +6,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import clanz.Clanz;
+import clanz.entity.ClanPlayer;
 
 public class ClanzCommandRunner{
 
 
 	
-	public ClanzCommandRunner(Clanz clanz, Player p, String[] args) {
+	public ClanzCommandRunner(Clanz clanz, ClanPlayer p, String[] args) {
+		clanz.getServer().broadcastMessage("§bTEST");
 		if(args.length == 0){ new CommandHelp(p, args, clanz); return;}
 		switch(args[0]){
 		case "?":
@@ -20,7 +22,8 @@ public class ClanzCommandRunner{
 		case "new": new CommandNew(p, args, clanz); break;
 		case "changename":
 		case "name": new CommandName(p, args, clanz); break;
-		default: {p.sendMessage("§cCommand not found. Type /c for help");}
+		case "info": new CommandInfo(p, args, clanz); break;
+		default: {p.p.getPlayer().sendMessage("§cCommand not found. Type /c for help");}
 		}
 	}
 	
