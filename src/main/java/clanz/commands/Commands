@@ -1,0 +1,57 @@
+List of Commands:
+
+§ = done
+± = working on
+
+	General commands:
+	/c list: List all clans
+±   /c info c [clan]: Show info on your clan or [clan]
+±   /c info p [player]: Shows info on you or [player]
+    /c join <clan>: Join clan <clan> or send an invite
+    /c leave: Leave your current clan
+    /c map: [on/off]: Shows a map or turn it on / off
+±   /c help: Shows help
+    
+    Creation commands
+§   /c new <name>: Create a new clan named <name>    
+§   /c name <name>: Change the name of your clan
+    /c desc <desc>: Change the description of your clan
+    /c motd <motd>: Change the message of the day
+    /c tag <tag>: Change the chat tag.
+    
+    Clan commands
+    /c title <player> <title>: Give a player a title
+    /c invite <true/false>: Toggles if invite is required
+    /c accept <player>: Accept a player join request
+    /c deny <player>: Deny a players join request.
+    /c sethome: Set the clan's home to your location
+    /c home: Teleport to your clan's home
+    /c promote <player>: Promote a player
+    /c demote <player>: Demote a player
+    /c kick <player>: Kick a player from your clan
+    /c ban <player>:  Ban a player from your clan
+    /c unban <player>: Unban a player from your clan
+    
+    Region commands
+    /c select: Get the area selection tool 
+    /c region <name> add: Add your selection to a region
+    /c region <name> remove: Remove your selection from a region
+    /c region <name> rename <name>: Rename a region
+    /c region <name> settings: Shows advanced region settings
+    /c region <name> del: Delete a region
+    
+    Money commands
+    /c money [clan]: Shows the amount of a clan
+    /c money deposit <amount>: Deposit money to your clan 
+    /c money withdraw <amount>: Withdraw money from your clan
+    /c money transfer <clan>: Transfer money to a clan
+    
+    Tax
+    /c tax: Shows tax info
+    /c tax <amount>: Sets tax amount
+    /c tax help: Shows help on advanced tax settings
+    
+    Relation
+    /c ally <clan>: Send ally request to a clan
+    /c enemy <clan>: Make a clan your enemy
+    /c war <clan>: Start a war with a clan
