@@ -1,17 +1,18 @@
 package clanz.commands;
 
-import org.bukkit.entity.Player;
-
 import clanz.*;
 import clanz.entity.Clan;
 import clanz.entity.ClanPlayer;
 
 public class CommandNew extends ClanzCommand{
-
+	
+	public final String USAGE = "/c new <name>";
+	public final int MINARGS = 2;
+	public final int MAXARGS = 2;
+	
 	public CommandNew(ClanPlayer p, String[] args, Clanz clanz) {
 		super(p, args, clanz);
-		if(args.length == 1){  NotEnoughArguments("/c new <name>"); return;}
-		if(args.length > 2){ TooManyArguments("/c new <name>"); return; }
+		if(!ArgCheck(this, args.length, MINARGS, MAXARGS, USAGE)) return;
 		if(args.length == 2){
 			if(p.clan != null){
 				Error("You must first leave your current clan to make an other");

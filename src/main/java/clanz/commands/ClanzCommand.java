@@ -1,19 +1,23 @@
 package clanz.commands;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import clanz.Clanz;
 import clanz.entity.ClanPlayer;
 
-public class ClanzCommand {
-
+public abstract class ClanzCommand {
+	
 	ClanPlayer p;
 	String[] args;
 	Clanz clanz;
 	
 	public ClanzCommand(ClanPlayer p, String[] args, Clanz clanz){
 		this.p = p; this.args = args; this.clanz = clanz;
+	}
+	
+	//Use if(!ArgCheck(this, args.length, MINARGS, MAXARGS, USAGE)) return;
+	public boolean ArgCheck(ClanzCommand cc, int args, int min, int max, String usage){
+		if(args < min){ NotEnoughArguments(usage); return false;}
+		if(args > max){ TooManyArguments(usage); return false;}
+		return true;
 	}
 	
 	public void Error(String message){

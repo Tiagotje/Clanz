@@ -3,6 +3,7 @@ main: clanz.Clanz
 description: Clanz is the clan plugin for RealCraft made by Tjagotje
 version: 0.0.1
 author: Tjagotje
+depend: [WorldGuard]
 commands:
    clanz:
       description: Main command for Clanz plugin

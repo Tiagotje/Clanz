@@ -1,17 +1,18 @@
 package clanz.commands;
 
-import org.bukkit.entity.Player;
-
 import clanz.Clanz;
 import clanz.entity.Clan;
 import clanz.entity.ClanPlayer;
 
 public class CommandName extends ClanzCommand{
+	
+	public final String USAGE = "/c name <name>";
+	public final int MINARGS = 2;
+	public final int MAXARGS = 2;
 
 	public CommandName(ClanPlayer p, String[] args, Clanz clanz) {
 		super(p, args, clanz);
-		if(args.length == 1){ NotEnoughArguments("/c name <name>"); return;}
-		if(args.length > 2){ TooManyArguments("/c name <name>"); return;}
+		if(!ArgCheck(this, args.length, MINARGS, MAXARGS, USAGE)) return;
 		if(p.clan == null){
 			Error("You must be in a clan to change it's name"); return;
 		}

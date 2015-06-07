@@ -1,0 +1,14 @@
+Clanz
+
+Clanz is a plugin where players can split up into clans.
+Clanz can be neutral, each others enemy or ally.
+Enemies can fight each other and try to take over the others land.
+
+Usage
+
+main command: /Clanz, /Clan, /cl, /c
+
+/c admin: Admin command help
+
+/c new <name>: Create a clan
+	

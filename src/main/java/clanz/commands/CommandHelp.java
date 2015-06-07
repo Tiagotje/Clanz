@@ -1,11 +1,13 @@
 package clanz.commands;
 
-import org.bukkit.entity.Player;
-
 import clanz.Clanz;
 import clanz.entity.ClanPlayer;
 
 public class CommandHelp extends ClanzCommand{
+	
+	public final String USAGE = "/c help";
+	public final int MINARGS = 0;
+	public final int MAXARGS = 1;
 	
 	final String[] Page1 = new String[]{"\n",
 			"§3_-_-_-_-_-_-_-_-_-_-_Clanz_-_-_-_-_-_-_-_-_-_-_",
